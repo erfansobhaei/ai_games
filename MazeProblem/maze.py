@@ -10,37 +10,47 @@ class Node():
         global goal
         self.index = index
         self.walls = '{0:04b}'.format(modifier)
-        self.heuristic = abs(index[0]-goal[0]) + abs(index[1]-goal[1])
-        self.evalfunc = abs(index[0]-goal[0]) + abs(index[1]-goal[1])
+        self.heuristic = self.manhattan_distance(self.index, goal)
+        self.evalfunc = self.manhattan_distance(self.index, goal)
         self.status = status
         self.left = self.up = self.right = self.down = None
+    
+    def manhattan_distance(self, index, goal):
+        return abs(index[0]-goal[0]) + abs(index[1]-goal[1])
 
     def successors(self, nodes):
         result = []
+        path_cost = self.evalfunc - self.heuristic
+        index = self.index
+
         # Check for left succesor
         if self.walls[0] == '0' and self.status != "RIGHT":
-            self.left = copy.deepcopy(nodes[self.index[0]][self.index[1]-1])
-            self.left.increase_evalfunc(self.evalfunc - self.heuristic + 1)
+            self.left = copy.deepcopy(nodes[index[0]][index[1]-1])
+            self.left.increase_evalfunc(path_cost + 1)
             self.left.set_status("LEFT")
             result.append(self.left)
+
         # Check for upper succesor
         if self.walls[1] == '0' and self.status != "DOWN":
-            self.up = copy.deepcopy(nodes[self.index[0]-1][self.index[1]])
-            self.up.increase_evalfunc(self.evalfunc - self.heuristic + 1)
+            self.up = copy.deepcopy(nodes[index[0]-1][index[1]])
+            self.up.increase_evalfunc(path_cost + 1)
             self.up.set_status("UP")
             result.append(self.up)
+
         # Check for right succesor
         if self.walls[2] == '0' and self.status != "LEFT":
-            self.right = copy.deepcopy(nodes[self.index[0]][self.index[1]+1])
-            self.right.increase_evalfunc(self.evalfunc - self.heuristic + 1)
+            self.right = copy.deepcopy(nodes[index[0]][index[1]+1])
+            self.right.increase_evalfunc(path_cost + 1)
             self.right.set_status("RIGHT")
             result.append(self.right)
+
         # Check for bottom succesor
         if self.walls[3] == '0' and self.status != "UP":
-            self.down = copy.deepcopy(nodes[self.index[0]+1][self.index[1]])
-            self.down.increase_evalfunc(self.evalfunc - self.heuristic + 1)
+            self.down = copy.deepcopy(nodes[index[0]+1][index[1]])
+            self.down.increase_evalfunc(path_cost + 1)
             self.down.set_status("DOWN")
             result.append(self.down)
+
         return result
     
     def increase_evalfunc(self, number):
@@ -50,26 +60,31 @@ class Node():
         self.status = status
 
     def __str__(self):
-        return self.walls + "  " +  str(self.heuristic)
+        return str(self.index) + "  " + self.evalfunc
 
 def initMaze(src):
     with open(src, 'r') as reader:
         global dimension, start, goal
+
         # Reading dimension of states
         dimension = reader.readline().strip('\n').split(' ')
         dimension = [ int(x) for x in dimension ]
+
         # Reading start state
         start = reader.readline().strip('\n').split(' ')
         start = [ int(x) for x in start ]
+
         # Reading goal state
         goal = reader.readline().strip('\n').split(' ')
         goal = [ int(x) for x in goal ]
+
         # Reading modifier number of each state and initializing nodes
         nodes = [ [0 for _ in range(dimension[1])] for _ in range(dimension[0]) ]
         modifiers = [[int(x) for x in line.split(' ')] for line in reader]
         for i in range(dimension[0]):
             for j in range(dimension[1]):
                 nodes[i][j] = Node(modifiers[i][j], [i, j])
+
         return nodes
 
 def A_start_search(nodes):
@@ -87,18 +102,20 @@ def A_start_search(nodes):
             if open_list[i].evalfunc < min:
                 min = open_list[i].evalfunc
                 chosen = i
-        node = open_list.pop(chosen)
-        if node.status:
-            actions.append(node.status)
+
+        # Choosing new node from open_list
+        chosen_node = open_list.pop(chosen)
+        if chosen_node.status:
+            actions.append(chosen_node.status)
 
         # Checking goal description for chosen node
-        if (node.index == goal):
+        if (chosen_node.index == goal):
             return actions
 
         # Checking weather chosen node has not any child
-        successors = node.successors(nodes)
+        successors = chosen_node.successors(nodes)
         if not successors:
-            closed_list.append(node)
+            closed_list.append(chosen_node)
             continue
 
         for child in successors:
@@ -125,10 +142,11 @@ def A_start_search(nodes):
                 open_list.append(child)
 
         # Appending child to closed_list
-        closed_list.append(node)
+        closed_list.append(chosen_node)
      
     return False
 
-
-nodes = initMaze(sys.argv[1])
-print(A_start_search(nodes))
+for i in range(1, len(sys.argv)):
+    # print(sys.argv[i])
+    nodes = initMaze(sys.argv[i])
+    print(A_start_search(nodes))

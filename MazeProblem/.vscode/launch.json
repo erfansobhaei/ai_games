@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/maze.py",
             "console": "integratedTerminal",
-            "args": ["map.txt"]
+            "args": ["map.txt", "map2.txt"]
         }
     ]
 }
