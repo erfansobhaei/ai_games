@@ -1,6 +1,8 @@
 import sys
 import copy
 import matplotlib.pyplot as plt
+import warnings
+warnings.filterwarnings("ignore")
 
 dimension = []
 start = []
@@ -150,8 +152,12 @@ def A_start_search(nodes):
 
 def travers_tree_action(goal):
     actions = []
+   
+    # Checking for root node
     if not isinstance(goal, Node):
         return []
+
+    # Going to predecessor
     elif goal.status == "LEFT":
         actions.append("LEFT")
         actions.extend(travers_tree_action(goal.right))
@@ -168,8 +174,12 @@ def travers_tree_action(goal):
 
 def travers_tree_index(goal):
     index = []
+   
+    # Checking for root node
     if not isinstance(goal, Node):
         return []
+   
+    # Going to predecessor
     else:
         index.append(goal.index)
         if goal.status == "LEFT":
@@ -182,21 +192,28 @@ def travers_tree_index(goal):
             index.extend(travers_tree_index(goal.up))
     return index
 
-def make_visual_solution(nodes, indexes):
+def make_visual_solution(nodes, indexes, src):
+    # Creating empty maze
     maze = [ [" " for _ in range(dimension[1])] for _ in range(dimension[0]) ]
     
+    # Modifying plot
     plt.xticks([])
     plt.yticks([])
     plt.axes().invert_yaxis()
     plt.axis('off')
     t = plt.table(maze, loc='center', colWidths = [0.08]*dimension[1])
+   
+    # Specifying solution cells
     for i in range(len(indexes)):
         t[(indexes[i][0], indexes[i][1])].get_text().set_text(str(i))
         t[(indexes[i][0], indexes[i][1])].set_facecolor(make_color_spectrum(i, len(indexes)))
-    plt.savefig("test.png", bbox_inches='tight')
+  
+    # Saving image of plot
+    plt.savefig("{}_result.png".format(src[:-4]), bbox_inches='tight')
 
 
 def make_color_spectrum(i,domain):
+    # Calculating hex RGB based on number of steps
     r = hex(255-int(i*(255/domain-1)/1)).split('x')[-1]
     g = hex(255-int(i*(255/domain-1)/2)).split('x')[-1]
     b = hex(255-int(i*(255/domain-1)/3)).split('x')[-1]
@@ -205,12 +222,12 @@ def make_color_spectrum(i,domain):
 
 
 
-
+# Solving Mazes
 for i in range(1, len(sys.argv)):
     nodes = initMaze(sys.argv[i])
     goal = A_start_search(nodes)
     actions = travers_tree_action(goal)[::-1]
     indexes = travers_tree_index(goal)[::-1]
     print("Actions of " + sys.argv[i] + ": " + str(actions))
-    make_visual_solution(nodes, indexes)
+    make_visual_solution(nodes, indexes, sys.argv[i])
     
