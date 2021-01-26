@@ -1,5 +1,6 @@
 import sys
 import copy
+import matplotlib as plt
 
 dimension = []
 start = []
@@ -147,27 +148,44 @@ def A_start_search(nodes):
 
     return False
 
-def travers_tree(goal):
+def travers_tree_action(goal):
     actions = []
     if not isinstance(goal, Node):
         return []
     elif goal.status == "LEFT":
         actions.append("LEFT")
-        actions.extend(travers_tree(goal.right))
+        actions.extend(travers_tree_action(goal.right))
     elif goal.status == "UP":
         actions.append("UP")
-        actions.extend(travers_tree(goal.down))
+        actions.extend(travers_tree_action(goal.down))
     elif goal.status == "RIGHT":
         actions.append("RIGHT")
-        actions.extend(travers_tree(goal.left))
+        actions.extend(travers_tree_action(goal.left))
     elif goal.status == "DOWN":
         actions.append("DOWN")
-        actions.extend(travers_tree(goal.up))
+        actions.extend(travers_tree_action(goal.up))
     return actions
 
+def travers_tree_index(goal):
+    index = []
+    if not isinstance(goal, Node):
+        return []
+    else:
+        index.append(goal.index)
+        if goal.status == "LEFT":
+            index.extend(travers_tree_index(goal.right))
+        elif goal.status == "UP":
+            index.extend(travers_tree_index(goal.down))
+        elif goal.status == "RIGHT":
+            index.extend(travers_tree_index(goal.left))
+        elif goal.status == "DOWN":
+            index.extend(travers_tree_index(goal.up))
+    return index
+
 for i in range(1, len(sys.argv)):
-    # print(sys.argv[i])
     nodes = initMaze(sys.argv[i])
     goal = A_start_search(nodes)
-    print(travers_tree(goal)[::-1])
+    actions = travers_tree_action(goal)[::-1]
+    indexes = travers_tree_index(goal)[::-1]
+    print("Actions of " + sys.argv[i] + ": " + str(actions))
     
