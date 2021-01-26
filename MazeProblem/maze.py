@@ -189,10 +189,19 @@ def make_visual_solution(nodes, indexes):
     plt.yticks([])
     plt.axes().invert_yaxis()
     plt.axis('off')
-    t = plt.table(maze)
+    t = plt.table(maze, loc='center', colWidths = [0.08]*dimension[1])
     for i in range(len(indexes)):
         t[(indexes[i][0], indexes[i][1])].get_text().set_text(str(i))
+        t[(indexes[i][0], indexes[i][1])].set_facecolor(make_color_spectrum(i, len(indexes)))
     plt.savefig("test.png", bbox_inches='tight')
+
+
+def make_color_spectrum(i,domain):
+    r = hex(255-int(i*(255/domain-1)/1)).split('x')[-1]
+    g = hex(255-int(i*(255/domain-1)/2)).split('x')[-1]
+    b = hex(255-int(i*(255/domain-1)/3)).split('x')[-1]
+    return "#{}{}{}".format(r,g,b)
+
 
 
 
