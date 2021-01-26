@@ -1,6 +1,6 @@
 import sys
 import copy
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 dimension = []
 start = []
@@ -182,10 +182,26 @@ def travers_tree_index(goal):
             index.extend(travers_tree_index(goal.up))
     return index
 
+def make_visual_solution(nodes, indexes):
+    maze = [ [" " for _ in range(dimension[1])] for _ in range(dimension[0]) ]
+    
+    plt.xticks([])
+    plt.yticks([])
+    plt.axes().invert_yaxis()
+    plt.axis('off')
+    t = plt.table(maze)
+    for i in range(len(indexes)):
+        t[(indexes[i][0], indexes[i][1])].get_text().set_text(str(i))
+    plt.savefig("test.png", bbox_inches='tight')
+
+
+
+
 for i in range(1, len(sys.argv)):
     nodes = initMaze(sys.argv[i])
     goal = A_start_search(nodes)
     actions = travers_tree_action(goal)[::-1]
     indexes = travers_tree_index(goal)[::-1]
     print("Actions of " + sys.argv[i] + ": " + str(actions))
+    make_visual_solution(nodes, indexes)
     
