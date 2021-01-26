@@ -1,5 +1,7 @@
 import sys
 import copy
+import random
+import math
 
 n = 0
 queens = []
@@ -41,7 +43,44 @@ def calculate_h(queens):
     return int((n*(n-1))/2) - (checks)
 
 
-init(sys.argv[1])
-table = get_evalfunc_table()
+def simulated_annealing():
+    global temperature
+    t = 0
+    current = copy.deepcopy(queens)
+    while True: 
+        temperature = schedule(t)
+        if temperature <= 0:
+            break
+        next_state = make_random_successor(current)
+        delta_E = calculate_h(next_state) - calculate_h(current)
+    
+        if delta_E > 0:
+            current = copy.deepcopy(next_state)
+        elif is_promising(delta_E):
+            current = copy.deepcopy(next_state)
+        t += 1
+    return current
 
+def schedule(t):
+    return (n*(n-1))/2 - t*(((n*(n-1))/2)/50)
+
+def make_random_successor(current):
+    c = random.randint(0, n-1)
+    r = random.randint(0, n-1)
+    while [r,c] in current:
+        r = random.randint(0, n-1)
+    next_state = copy.deepcopy(current)
+    next_state[c] = [r,c]
+    return next_state
+
+def is_promising(delta_E):
+    p = (math.e)**(delta_E/temperature)
+    return random.uniform(0 ,1) <= p
+
+
+
+
+init(sys.argv[1].strip())
+table = get_evalfunc_table()
+solution = simulated_annealing()
 
