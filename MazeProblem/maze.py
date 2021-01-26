@@ -28,6 +28,7 @@ class Node():
             self.left = copy.deepcopy(nodes[index[0]][index[1]-1])
             self.left.increase_evalfunc(path_cost + 1)
             self.left.set_status("LEFT")
+            self.left.right = self
             result.append(self.left)
 
         # Check for upper succesor
@@ -35,6 +36,7 @@ class Node():
             self.up = copy.deepcopy(nodes[index[0]-1][index[1]])
             self.up.increase_evalfunc(path_cost + 1)
             self.up.set_status("UP")
+            self.up.down = self
             result.append(self.up)
 
         # Check for right succesor
@@ -42,6 +44,7 @@ class Node():
             self.right = copy.deepcopy(nodes[index[0]][index[1]+1])
             self.right.increase_evalfunc(path_cost + 1)
             self.right.set_status("RIGHT")
+            self.right.left = self
             result.append(self.right)
 
         # Check for bottom succesor
@@ -49,6 +52,7 @@ class Node():
             self.down = copy.deepcopy(nodes[index[0]+1][index[1]])
             self.down.increase_evalfunc(path_cost + 1)
             self.down.set_status("DOWN")
+            self.down.up = self
             result.append(self.down)
 
         return result
@@ -88,7 +92,6 @@ def initMaze(src):
         return nodes
 
 def A_start_search(nodes):
-    actions = []
     closed_list = []
     
     # Appending start state at begininng of algorithm
@@ -105,12 +108,10 @@ def A_start_search(nodes):
 
         # Choosing new node from open_list
         chosen_node = open_list.pop(chosen)
-        if chosen_node.status:
-            actions.append(chosen_node.status)
 
         # Checking goal description for chosen node
         if (chosen_node.index == goal):
-            return actions
+            return chosen_node
 
         # Checking weather chosen node has not any child
         successors = chosen_node.successors(nodes)
@@ -143,10 +144,30 @@ def A_start_search(nodes):
 
         # Appending child to closed_list
         closed_list.append(chosen_node)
-     
+
     return False
+
+def travers_tree(goal):
+    actions = []
+    if not isinstance(goal, Node):
+        return []
+    elif goal.status == "LEFT":
+        actions.append("LEFT")
+        actions.extend(travers_tree(goal.right))
+    elif goal.status == "UP":
+        actions.append("UP")
+        actions.extend(travers_tree(goal.down))
+    elif goal.status == "RIGHT":
+        actions.append("RIGHT")
+        actions.extend(travers_tree(goal.left))
+    elif goal.status == "DOWN":
+        actions.append("DOWN")
+        actions.extend(travers_tree(goal.up))
+    return actions
 
 for i in range(1, len(sys.argv)):
     # print(sys.argv[i])
     nodes = initMaze(sys.argv[i])
-    print(A_start_search(nodes))
+    goal = A_start_search(nodes)
+    print(travers_tree(goal)[::-1])
+    
