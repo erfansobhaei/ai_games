@@ -6,12 +6,14 @@ import math
 n = 0
 queens = []
 temperature = 0
+no_of_setps = 0
 
-def init(src):
+def init(src, steps):
     with open(src, 'r') as reader:
-        global queens,n, temperature
+        global queens,n, temperature, no_of_setps
         n = int(reader.readline().strip('\n'))
         temperature = (n*(n-1))/2
+        no_of_setps = steps
         tmp = reader.readline().strip('\n').split(' ')
 
         # Adding column index to row indexes
@@ -43,26 +45,35 @@ def calculate_h(queens):
     return int((n*(n-1))/2) - (checks)
 
 
-def simulated_annealing():
+def simulated_annealing(src):
     global temperature
     t = 0
     current = copy.deepcopy(queens)
-    while True: 
-        temperature = schedule(t)
-        if temperature <= 0:
-            break
-        next_state = make_random_successor(current)
-        delta_E = calculate_h(next_state) - calculate_h(current)
-    
-        if delta_E > 0:
-            current = copy.deepcopy(next_state)
-        elif is_promising(delta_E):
-            current = copy.deepcopy(next_state)
-        t += 1
+    with open(src + "_log.txt", 'w') as writer:
+        writer.write("No.{}Current{}h{}Next{}h{}Temprature{}DeltaE{}Status\n".format(" "*5, " "*n*8, " "*8, " "*n*8, " "*8, " "*2, " "*5))
+        writer.write("-"*n*30 + '\n')
+        while True:
+            flag = False
+            temperature = schedule(t)
+            if temperature <= 0:
+                break
+            next_state = make_random_successor(current)
+            current_h = calculate_h(current)
+            next_state_h = calculate_h(next_state)
+            delta_E = next_state_h - current_h
+            tmp = current
+            if delta_E > 0:
+                flag = True
+                current = copy.deepcopy(next_state)
+            elif is_promising(delta_E):
+                flag = True
+                current = copy.deepcopy(next_state)
+            writer.write(format_iteration(t, tmp, current_h, next_state, next_state_h, delta_E, flag))
+            t += 1
     return current
 
 def schedule(t):
-    return (n*(n-1))/2 - t*(((n*(n-1))/2)/50)
+    return (n*(n-1))/2 - t*(((n*(n-1))/2)/no_of_setps)
 
 def make_random_successor(current):
     c = random.randint(0, n-1)
@@ -78,9 +89,25 @@ def is_promising(delta_E):
     return random.uniform(0 ,1) <= p
 
 
+def format_iteration(t, current, h1, next_state, h2, delta_E, flag):
+    sign = " "
+    if delta_E > 0:
+        sign = "+"
+    elif delta_E < 0:
+        sign = ""
+    return '{:02d}. \t{}       {}\t\t{}    {}\t\t{:04f}\t{}{}\t\t  {}\n'.format(t, current, h1, next_state, h2, temperature, sign ,delta_E, "Taken" if flag else "Not Taken")
+
+def print_solution(solution):
+    print("Solution is " + str(solution) + "  with h = {} from {}".format(calculate_h(solution), int(n*(n-1)/2)))
+    map = [["-  " for _ in range(n)] for _ in range(n)]
+    for i in solution:
+        map[i[0]][i[1]] = '\u2655  '
+    for row in map:
+        print("".join(row))
 
 
-init(sys.argv[1].strip())
+init(sys.argv[1], steps= 100 if len(sys.argv) < 3 else int(sys.argv[2]))
 table = get_evalfunc_table()
-solution = simulated_annealing()
+solution = simulated_annealing(sys.argv[1])
+
 
