@@ -1,4 +1,5 @@
 import tkinter as tk
+import copy
 import tkinter.messagebox
 
 # Creating screen and initial configuration
@@ -56,7 +57,6 @@ def update_map(i,j):
             tkinter.messagebox.showinfo("Tic-Tac-Toe", "O wins!")
         else:
             tkinter.messagebox.showinfo("Tic-Tac-Toe", "X wins!")
-        is_player_X = not is_player_X
         init_game()
 
 def is_game_over():
@@ -124,5 +124,67 @@ def update_label():
     label_1.grid(row=4,column=2)
 
 
+# Assuming AI always is O
+class Node:
+    def __init__(self, board, is_maximizer):
+        self.board = board
+        self.heuristic = self.calculate_h('X') - self.calculate_h('O')
+        self.is_maximizer = is_maximizer
+        self.successors = None
+
+    def calculate_h(self, opponent):
+        heuristic = 0
+
+        # Checking for row
+        for i in range(3):
+            flag = True
+            for j in range(3):
+                if self.board[i][j] == opponent:
+                    flag = False
+                    break
+            heuristic = heuristic+1 if flag else heuristic
+
+        # Checking for column
+        for i in range(3):
+            flag = True
+            for j in range(3):
+                if self.board[j][i] == opponent:
+                    flag = False
+                    break
+            heuristic = heuristic+1 if flag else heuristic
+        
+        # Checking for top-right to down-left diagonal winning
+        flag = True
+        if self.board[0][0] == opponent or  self.board[1][1] == opponent or self.board[2][2] == opponent:
+            flag = False
+        heuristic = heuristic+1 if flag else heuristic
+
+        # Checking for top-left to down-right diagonal winning 
+        flag = True
+        if self.board[0][2] == opponent or  self.board[1][1] == opponent or self.board[2][0] == opponent:
+            flag = False
+        heuristic = heuristic+1 if flag else heuristic
+        
+        return heuristic
+
+
+    def expand(self):
+        successors = []
+        for i in range(3):
+            for j in range(3):
+                if(self.board[i][j] == ''):
+                    tmp = copy.deepcopy(self.board)
+                    tmp[i][j] = 'O'
+                    # successors = [ (child, (action-->)[i,j])), (child, (action-->)[i,j]), ...]
+                    successors.append((Node(tmp, not self.is_maximizer), [i,j]))
+        self.successors = successors
+    
+    def __str__(self):
+        return str(self.board) + "   h=" + str(self.heuristic)
+
+
+
 init_game()
-screen.mainloop()
+# screen.mainloop()
+n = Node([['','',''],['X','',''],['','','']], True)
+n.expand()
