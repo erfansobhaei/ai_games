@@ -54,7 +54,10 @@ A text file with the following sections for running the program is necessary:
 ### Example
 A file with the following content specifies an 8x8 chessboard. The number of each queen's row are written respectively.
 
-```8```</br>```0 1 2 3 4 5 6 7```
+```
+8
+0 1 2 3 4 5 6 7
+```
 
 The corresponding state of queens are:
 
@@ -72,14 +75,16 @@ The corresponding state of queens are:
 ## How to Run Code?
 The only requirment for running this code is installing python.
 The following command runs the program:
+
 ```python3 nqueens.py path-to-problem.txt [no-of-steps]```
+
 Thr first argument is the address of mentioned file. And second argument which is optional is the number of steps that algorithm has to take. The default value of steps are 100.
 
 ## Where Is the Suggested Solution?
 After running completely, you will find the final suggested solution in the format below:
 
-```Solution is [[2, 0], [7, 1], [5, 2], [1, 3], [3, 4], [6, 5], [0, 6], [2, 7]]  with h = 26 from 28```
 ```
+Solution is [[2, 0], [7, 1], [5, 2], [1, 3], [3, 4], [6, 5], [0, 6], [2, 7]]  with h = 26 from 28
 -  -  -  -  -  -  ♛  -  
 -  -  -  ♛  -  -  -  -  
 ♛  -  -  -  -  -  -  ♛  
@@ -89,5 +94,4 @@ After running completely, you will find the final suggested solution in the form
 -  -  -  -  -  ♛  -  -  
 -  ♛  -  -  -  -  -  -
 ```
-You can find the indexes of queens in the first line. Also, number of non-checking queen pairs of the suggested state is mentioned. And you can see visual form of the queens, but this is **not** only output of algorithm.
-There is a **log file** in the same directory, you can see all of the steps with their informations there.
+You can find the indexes of queens in the first line. Also, the number of non-checking queen pairs of the suggested state is mentioned. And you can see the visual form of the queens, but this is *not* the only output of the algorithm. There is a **log file** in the same directory, you can see all of the steps with their pieces of information there.
