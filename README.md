@@ -40,3 +40,54 @@ As you run the script, it will print the action sequence from the start state to
 Also, you can see the visual form of steps in the corresponding ```.png```(s) file which is created in the same directory. The figure below is the image of the example's solution:
 
 ![example](/MazeProblem/docs/example_result.png)
+
+## 2. N-Queens using Simulated Annealing Algorithm
+This [python script](/NQueens/nqueens.py) uses simulated annealing which is a well-known local search algorithm. In metallurgy, annealing is the process used to temper or harden metals and glass by heating them to a high temperature and then gradually cooling them, thus allowing the material to reach a low energy crystalline state. This algorithm considers a similar strategy for optimization the heuristic.
+This code considers **non-checking queen pairs** as its heuristic and tries to find the global maximum for it.
+
+## How to Input State of Queens?
+For ease of processing, it assumes each column contains exactly one queen.
+A text file with the following sections for running the program is necessary:
+1. First line defines ```n``` that is the number of queens.
+2. Second line contains of n numbers in **[0,n-1]** interval that determine the row's index of each queen.
+
+### Example
+A file with the following content specifies an 8x8 chessboard. The number of each queen's row are written respectively.
+
+```8```</br>```0 1 2 3 4 5 6 7```
+
+The corresponding state of queens are:
+
+```
+♛  -  -  -  -  -  -  -  
+-  ♛  -  -  -  -  -  -  
+-  -  ♛  -  -  -  -  -  
+-  -  -  ♛  -  -  -  -  
+-  -  -  -  ♛  -  -  -  
+-  -  -  -  -  ♛  -  -  
+-  -  -  -  -  -  ♛  -  
+-  -  -  -  -  -  -  ♛
+```
+
+## How to Run Code?
+The only requirment for running this code is installing python.
+The following command runs the program:
+```python3 nqueens.py path-to-problem.txt [no-of-steps]```
+Thr first argument is the address of mentioned file. And second argument which is optional is the number of steps that algorithm has to take. The default value of steps are 100.
+
+## Where Is the Suggested Solution?
+After running completely, you will find the final suggested solution in the format below:
+
+```Solution is [[2, 0], [7, 1], [5, 2], [1, 3], [3, 4], [6, 5], [0, 6], [2, 7]]  with h = 26 from 28```
+```
+-  -  -  -  -  -  ♛  -  
+-  -  -  ♛  -  -  -  -  
+♛  -  -  -  -  -  -  ♛  
+-  -  -  -  ♛  -  -  -  
+-  -  -  -  -  -  -  -  
+-  -  ♛  -  -  -  -  -  
+-  -  -  -  -  ♛  -  -  
+-  ♛  -  -  -  -  -  -
+```
+You can find the indexes of queens in the first line. Also, number of non-checking queen pairs of the suggested state is mentioned. And you can see visual form of the queens, but this is **not** only output of algorithm.
+There is a **log file** in the same directory, you can see all of the steps with their informations there.
