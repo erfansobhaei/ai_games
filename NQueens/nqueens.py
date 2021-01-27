@@ -138,13 +138,13 @@ def print_solution(solution):
     # Printing map of final solution
     map = [["-  " for _ in range(n)] for _ in range(n)]
     for i in solution:
-        map[i[0]][i[1]] = '\u2655  '
+        map[i[0]][i[1]] = '\u265B  '
     for row in map:
         print("".join(row))
 
 
 # Default number of steps is 100 unless command has corresponding argument
-init(sys.argv[1], steps= 100 if len(sys.argv) < 3 else int(sys.argv[2]))
+init(sys.argv[1], steps= 1000 if len(sys.argv) < 3 else int(sys.argv[2]))
 
 # Calling function and printing solution
 solution = simulated_annealing(sys.argv[1])

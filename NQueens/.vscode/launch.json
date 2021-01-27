@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/nqueens.py",
             "console": "integratedTerminal",
-            "args": ["problem.txt", "100"]
+            "args": ["problem.txt", "1000"]
         }
     ]
 }
