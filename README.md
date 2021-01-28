@@ -1,6 +1,11 @@
 # Simple Artificial Inteligence Games
 This repository consists of three simple games which are using artificial intelligence search algorithms:
 
+[1. Maze Problem using A* Algorithm](#1-maze-problem-using-a-algorithm)</br>
+[2. N-Queens using Simulated Annealing Algorithm](#2-n-queens-using-simulated-annealing-algorithm)</br>
+[3. Tic-Tac-Toe using Alpha-Beta pruning algorithm](#3-tic-tac-toe-using-alpha-beta-pruning-algorithm)</br>
+
+
 ## 1. Maze Problem using A* Algorithm
 The [maze solver script](/MazeProblem/maze.py) using A* algorithm which is an informed search algorithm and it utilizes [Manhattan distance](https://en.wikipedia.org/wiki/Taxicab_geometry) as its heuristic for finding the optimal path from the start state of the maze to its goal state.
 
@@ -109,7 +114,10 @@ Go to directory of ```tic-tac-toe.py``` which is [here](./Tic-Tac-Toe) and simpl
 python3 tic-tac-toe.py
 ```
 ### The result
+
 The visual interface are available here:
+
+![Demo](./Tic-Tac-Toe/images/demo.gif "Demo")
 
 
 ## Credits
