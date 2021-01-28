@@ -45,7 +45,7 @@ Also, you can see the visual form of steps in the corresponding ```.png```(s) fi
 This [python script](/NQueens/nqueens.py) uses simulated annealing which is a well-known local search algorithm. In metallurgy, annealing is the process used to temper or harden metals and glass by heating them to a high temperature and then gradually cooling them, thus allowing the material to reach a low energy crystalline state. This algorithm considers a similar strategy for optimization the heuristic.
 This code considers **non-checking queen pairs** as its heuristic and tries to find the global maximum for it.
 
-## How to Input State of Queens?
+### How to Input State of Queens?
 For ease of processing, it assumes each column contains exactly one queen.
 A text file with the following sections for running the program is necessary:
 1. First line defines ```n``` that is the number of queens.
@@ -72,7 +72,7 @@ The corresponding state of queens are:
 -  -  -  -  -  -  -  ♛
 ```
 
-## How to Run Code?
+### How to Run Code?
 The only requirment for running this code is installing python.
 The following command runs the program:
 
@@ -95,3 +95,22 @@ Solution is [[2, 0], [7, 1], [5, 2], [1, 3], [3, 4], [6, 5], [0, 6], [2, 7]]  wi
 -  ♛  -  -  -  -  -  -
 ```
 You can find the indexes of queens in the first line. Also, the number of non-checking queen pairs of the suggested state is mentioned. And you can see the visual form of the queens, but this is *not* the only output of the algorithm. There is a **log file** in the same directory, you can see all of the steps with their pieces of information there.
+
+
+## 3. Tic-Tac-Toe using Alpha-Beta pruning algorithm
+Tic-Tac-Toe or X O game is a simple game with a perfect deterministic search tree. The Alpha-Beta pruning algorithm tries to prune unuseful branches in order to optimize time and space complexity.
+
+### Requirments
+The visual interface of this project are based on [Tkinter](https://docs.python.org/3/library/tkinter.html) so installing this module is neccessary.
+
+### How to Run Code?
+Go to directory of ```tic-tac-toe.py``` which is [here](./Tic-Tac-Toe) and simply run following command:
+```
+python3 tic-tac-toe.py
+```
+### The result
+The visual interface are available here:
+
+
+## Credits
+This project is a part of *Artificial Intelligence and Expert System* course of *Kharazmi University*.</br>The [icons](./Tic-Tac-Toe/images) are provided from [Icon8](https://icons8.com/).
