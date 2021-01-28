@@ -41,7 +41,8 @@ class Node:
                     tmp[i][j] = self.icon
                     # Adding a dictionary as new successor
                     successors.append(
-                        {"node": Node(tmp, not self.is_maximizer), "action": [i, j]}
+                        {"node": Node(tmp, not self.is_maximizer),
+                         "action": [i, j]}
                     )
         self.successors = successors
 
@@ -91,11 +92,11 @@ class Node:
     def __str__(self):
         return str(self.board) + "   h=" + str(self.utilityfunc)
 
-
-
+# Alpha-beta alogrithm functions
 def alpha_beta_search(node, i, j):
     v = max_value(node, -float("inf"), float("inf"))
     return v["action"]
+
 
 def max_value(node, alpha, beta):
     # Terminal testing
@@ -120,6 +121,7 @@ def max_value(node, alpha, beta):
         alpha = max([alpha, v])
     return {"v": v, "action": action}
 
+
 def min_value(node, alpha, beta):
     # Terminal testing
     action = None
@@ -131,7 +133,7 @@ def min_value(node, alpha, beta):
     node.expand()
     for n in node.successors:
         max_value_child = max_value(n["node"], alpha, beta)["v"]
-        
+
         # New node is better
         if v > max_value_child:
             v = max_value_child
@@ -144,9 +146,7 @@ def min_value(node, alpha, beta):
     return {"v": v, "action": action}
 
 
-
-
-
+# Visual components and game logic functions
 def button_click(i, j):
     global is_player_X, board, board_labels
 
