@@ -8,8 +8,9 @@ dimension = []
 start = []
 goal = []
 
+
 class Node():
-    def __init__(self, modifier, index, status = None):
+    def __init__(self, modifier, index, status=None):
         global goal
         self.index = index
         self.walls = '{0:04b}'.format(modifier)
@@ -17,9 +18,9 @@ class Node():
         self.evalfunc = self.manhattan_distance(self.index, goal)
         self.status = status
         self.left = self.up = self.right = self.down = None
-    
+
     def manhattan_distance(self, index, goal):
-        return abs(index[0]-goal[0]) + abs(index[1]-goal[1])
+        return abs(index[0] - goal[0]) + abs(index[1] - goal[1])
 
     def successors(self, nodes):
         result = []
@@ -28,7 +29,7 @@ class Node():
 
         # Check for left succesor
         if self.walls[0] == '0' and self.status != "RIGHT":
-            self.left = copy.deepcopy(nodes[index[0]][index[1]-1])
+            self.left = copy.deepcopy(nodes[index[0]][index[1] - 1])
             self.left.increase_evalfunc(path_cost + 1)
             self.left.set_status("LEFT")
             self.left.right = self
@@ -36,7 +37,7 @@ class Node():
 
         # Check for upper succesor
         if self.walls[1] == '0' and self.status != "DOWN":
-            self.up = copy.deepcopy(nodes[index[0]-1][index[1]])
+            self.up = copy.deepcopy(nodes[index[0] - 1][index[1]])
             self.up.increase_evalfunc(path_cost + 1)
             self.up.set_status("UP")
             self.up.down = self
@@ -44,7 +45,7 @@ class Node():
 
         # Check for right succesor
         if self.walls[2] == '0' and self.status != "LEFT":
-            self.right = copy.deepcopy(nodes[index[0]][index[1]+1])
+            self.right = copy.deepcopy(nodes[index[0]][index[1] + 1])
             self.right.increase_evalfunc(path_cost + 1)
             self.right.set_status("RIGHT")
             self.right.left = self
@@ -52,14 +53,14 @@ class Node():
 
         # Check for bottom succesor
         if self.walls[3] == '0' and self.status != "UP":
-            self.down = copy.deepcopy(nodes[index[0]+1][index[1]])
+            self.down = copy.deepcopy(nodes[index[0] + 1][index[1]])
             self.down.increase_evalfunc(path_cost + 1)
             self.down.set_status("DOWN")
             self.down.up = self
             result.append(self.down)
 
         return result
-    
+
     def increase_evalfunc(self, number):
         self.evalfunc += number
 
@@ -69,24 +70,25 @@ class Node():
     def __str__(self):
         return str(self.index) + "  " + self.evalfunc
 
+
 def initMaze(src):
     with open(src, 'r') as reader:
         global dimension, start, goal
 
         # Reading dimension of states
         dimension = reader.readline().strip('\n').split(' ')
-        dimension = [ int(x) for x in dimension ]
+        dimension = [int(x) for x in dimension]
 
         # Reading start state
         start = reader.readline().strip('\n').split(' ')
-        start = [ int(x) for x in start ]
+        start = [int(x) for x in start]
 
         # Reading goal state
         goal = reader.readline().strip('\n').split(' ')
-        goal = [ int(x) for x in goal ]
+        goal = [int(x) for x in goal]
 
         # Reading modifier number of each state and initializing nodes
-        nodes = [ [0 for _ in range(dimension[1])] for _ in range(dimension[0]) ]
+        nodes = [[0 for _ in range(dimension[1])] for _ in range(dimension[0])]
         modifiers = [[int(x) for x in line.split(' ')] for line in reader]
         for i in range(dimension[0]):
             for j in range(dimension[1]):
@@ -94,11 +96,12 @@ def initMaze(src):
 
         return nodes
 
+
 def A_start_search(nodes):
     closed_list = []
-    
+
     # Appending start state at begininng of algorithm
-    open_list = [ nodes[start[0]][start[1]] ]
+    open_list = [nodes[start[0]][start[1]]]
 
     while open_list:
         # Searching open list for find node with minimum evaluation function
@@ -131,7 +134,6 @@ def A_start_search(nodes):
                     if n.evalfunc > child.evalfunc:
                         open_list.remove(n)
                         open_list.append(child)
-                    
 
             # Checking if chosen child is already on closed_list (and update it)
             for n in closed_list:
@@ -150,9 +152,10 @@ def A_start_search(nodes):
 
     return False
 
+
 def travers_tree_action(goal):
     actions = []
-   
+
     # Checking for root node
     if not isinstance(goal, Node):
         return []
@@ -172,13 +175,14 @@ def travers_tree_action(goal):
         actions.extend(travers_tree_action(goal.up))
     return actions
 
+
 def travers_tree_index(goal):
     index = []
-   
+
     # Checking for root node
     if not isinstance(goal, Node):
         return []
-   
+
     # Going to predecessor
     else:
         index.append(goal.index)
@@ -192,34 +196,34 @@ def travers_tree_index(goal):
             index.extend(travers_tree_index(goal.up))
     return index
 
+
 def make_visual_solution(nodes, indexes, src):
     # Creating empty maze
-    maze = [ [" " for _ in range(dimension[1])] for _ in range(dimension[0]) ]
-    
+    maze = [[" " for _ in range(dimension[1])] for _ in range(dimension[0])]
+
     # Modifying plot
     plt.xticks([])
     plt.yticks([])
     plt.axes().invert_yaxis()
     plt.axis('off')
-    t = plt.table(maze, loc='center', colWidths = [0.08]*dimension[1])
-   
+    t = plt.table(maze, loc='center', colWidths=[0.08] * dimension[1])
+
     # Specifying solution cells
     for i in range(len(indexes)):
         t[(indexes[i][0], indexes[i][1])].get_text().set_text(str(i))
-        t[(indexes[i][0], indexes[i][1])].set_facecolor(make_color_spectrum(i, len(indexes)))
-  
+        t[(indexes[i][0],
+           indexes[i][1])].set_facecolor(make_color_spectrum(i, len(indexes)))
+
     # Saving image of plot
     plt.savefig("{}_result.png".format(src[:-4]), bbox_inches='tight')
 
 
-def make_color_spectrum(i,domain):
-    # Calculating hex RGB based on number of steps
-    r = hex(255-int(i*(255/domain-1)/1)).split('x')[-1]
-    g = hex(255-int(i*(255/domain-1)/2)).split('x')[-1]
-    b = hex(255-int(i*(255/domain-1)/3)).split('x')[-1]
-    return "#{}{}{}".format(r,g,b)
-
-
+def make_color_spectrum(i, domain):
+    # Calculating hex RGB based on number of steps for printing solution picture
+    r = hex(255 - int(i * (255 / domain - 1) / 1)).split('x')[-1]
+    g = hex(255 - int(i * (255 / domain - 1) / 2)).split('x')[-1]
+    b = hex(255 - int(i * (255 / domain - 1) / 3)).split('x')[-1]
+    return "#{}{}{}".format(r, g, b)
 
 
 # Solving Mazes
@@ -230,4 +234,3 @@ for i in range(1, len(sys.argv)):
     indexes = travers_tree_index(goal)[::-1]
     print("Actions of " + sys.argv[i] + ": " + str(actions))
     make_visual_solution(nodes, indexes, sys.argv[i])
-    
