@@ -102,14 +102,14 @@ Solution is [[2, 0], [7, 1], [5, 2], [1, 3], [3, 4], [6, 5], [0, 6], [2, 7]]  wi
 You can find the indexes of queens in the first line. Also, the number of non-checking queen pairs of the suggested state is mentioned. And you can see the visual form of the queens, but this is *not* the only output of the algorithm. There is a **log file** in the same directory, you can see all of the steps with their pieces of information there.
 
 
-## 3. Tic-Tac-Toe using Alpha-Beta pruning algorithm
+## 3. Tic-Tac-Toe using Alpha-Beta Pruning Algorithm
 Tic-Tac-Toe or X O game is a simple game with a perfect deterministic search tree. The Alpha-Beta pruning algorithm tries to prune unuseful branches in order to optimize time and space complexity.
 
 ### Requirments
-The visual interface of this project are based on [Tkinter](https://docs.python.org/3/library/tkinter.html) so installing this module is neccessary.
+The visual interface of this project is based on [Tkinter](https://docs.python.org/3/library/tkinter.html) so installing this module is necessary.
 
 ### How to Run Code?
-Go to directory of ```tic-tac-toe.py``` which is [here](./Tic-Tac-Toe) and simply run following command:
+Go to the directory of ```tic-tac-toe.py``` which is [here](./Tic-Tac-Toe) and simply run following command:
 ```
 python3 tic-tac-toe.py
 ```
