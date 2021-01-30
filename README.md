@@ -1,4 +1,4 @@
-# Simple Artificial Inteligence Games
+# Simple Artificial Intelligence Games
 This repository consists of three simple games which are using artificial intelligence search algorithms:
 
 [1. Maze Problem using A* Algorithm](#1-maze-problem-using-a-algorithm)</br>
@@ -78,12 +78,12 @@ The corresponding state of queens are:
 ```
 
 ### How to Run Code?
-The only requirment for running this code is installing python.
+The only requirement for running this code is installing python.
 The following command runs the program:
 
 ```python3 nqueens.py path-to-problem.txt [no-of-steps]```
 
-Thr first argument is the address of mentioned file. And second argument which is optional is the number of steps that algorithm has to take. The default value of steps are 100.
+The first argument is the address of the mentioned file. And the second argument which is optional is the number of steps that the algorithm has to take. The default value of steps is 1000.
 
 ## Where Is the Suggested Solution?
 After running completely, you will find the final suggested solution in the format below:
@@ -109,13 +109,13 @@ Tic-Tac-Toe or X O game is a simple game with a perfect deterministic search tre
 The visual interface of this project is based on [Tkinter](https://docs.python.org/3/library/tkinter.html) so installing this module is necessary.
 
 ### How to Run Code?
-Go to the directory of ```tic-tac-toe.py``` which is [here](./Tic-Tac-Toe) and simply run following command:
+Go to the directory of ```tic-tac-toe.py``` which is [here](./Tic-Tac-Toe) and simply run the following command:
 ```
 python3 tic-tac-toe.py
 ```
 ### The result
 
-The visual interface are available here:
+The visual interface is available here:
 
 ![Demo](./Tic-Tac-Toe/images/demo.gif "Demo")
 
